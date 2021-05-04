@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RestaurantTest {
     Restaurant restaurant;
     int mockedcost;
-    List<Item> items ;
+    List<Item> items;
     //REFACTOR ALL THE REPEATED LINES OF CODE
 
     @BeforeEach
@@ -23,6 +23,7 @@ class RestaurantTest {
         restaurant = new Restaurant("Amelie's cafe","Chennai",openingTime,closingTime);
         restaurant.addToMenu("Sweet corn soup",119);
         restaurant.addToMenu("Vegetable lasagne", 269);
+
         restaurant.displayDetails();
     }
 
@@ -62,24 +63,24 @@ class RestaurantTest {
     public void selecting_one_or_more_items_from_menu_should_return_total_cost_of_selected_items(){
 
         items =  new ArrayList<Item>();
-        Item oneItem = new Item("Sweet corn soup",119);
-        oneItem.toString();
-        Item twoItem = new Item("Vegetable lasagne", 269);
-        twoItem.toString();
-        items.add(oneItem);
-        mockedcost = oneItem.getPrice() + twoItem.getPrice();
 
-        System.out.println("One Item Selected"+items+" and price of that item"+oneItem.getPrice());
+        Item oneItem = restaurant.getMenu().get(0);
+        Item twoItem =restaurant.getMenu().get(1);
+//        twoItem.toString();
+        items.add(oneItem);
+        Item spyitem1 = Mockito.spy(oneItem);
+        Mockito.when(spyitem1.getPrice()).thenReturn(119);
+        mockedcost = spyitem1.getPrice();
+
+        System.out.println("One Item Selected"+restaurant.getMenu().get(0)+" and price of that item "+mockedcost);
         assertEquals(oneItem.getPrice(),restaurant.getTotalAmountItems(items));
 
         items.add(twoItem);
+        Item spyitem2 = Mockito.spy(twoItem);
+        Mockito.when(spyitem2.getPrice()).thenReturn(269);
+        mockedcost = spyitem1.getPrice() + spyitem2.getPrice();
         System.out.println("Multiple Item Selected"+items+" and mocked amount"+mockedcost);
         assertEquals(mockedcost,restaurant.getTotalAmountItems(items));
-//
-
-
-
-
 
 
     }
